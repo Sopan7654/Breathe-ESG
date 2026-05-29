@@ -122,6 +122,13 @@ export interface FlagListItem {
   createdAt: string;
 }
 
+export interface FlagListResponse {
+  items: FlagListItem[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}
+
 export interface RecordFilters {
   status?: string;
   sourceType?: string;

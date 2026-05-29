@@ -1,7 +1,7 @@
 import api from './api';
 import type {
   RecordDto, RecordListResponse, RecordFilters, DashboardSummary, DataSourceDto,
-  AuditLogDto, AuditListResponse
+  AuditLogDto, AuditListResponse, FlagListResponse,
 } from '../types';
 
 export const recordsService = {
@@ -83,10 +83,10 @@ export const uploadService = {
 };
 
 export const flagsService = {
-  async getFlags(openOnly = true, severity?: string, page = 1, pageSize = 50) {
+  async getFlags(openOnly = true, severity?: string, page = 1, pageSize = 50): Promise<FlagListResponse> {
     const params = new URLSearchParams({ openOnly: String(openOnly), page: String(page), pageSize: String(pageSize) });
     if (severity) params.set('severity', severity);
-    const res = await api.get(`/api/flags?${params}`);
+    const res = await api.get<FlagListResponse>(`/api/flags?${params}`);
     return res.data;
   },
 };
