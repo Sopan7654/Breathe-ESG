@@ -2,6 +2,7 @@
 api/urls.py — All /api/* routes.
 Mirrors the C# controller routes exactly.
 """
+from django.http import JsonResponse
 from django.urls import path
 from .views.records import (
     RecordsListView, RecordSummaryView, RecordDataSourcesView,
@@ -11,7 +12,16 @@ from .views.uploads import UploadIngestView
 from .views.audits import AuditListView, AuditEntityView
 from .views.flags import FlagsListView
 
+
+def health_check(request):
+    """Render health-check probe — must return HTTP 200."""
+    return JsonResponse({'status': 'ok'})
+
+
 urlpatterns = [
+    # Health check — used by Render to verify service is alive
+    path('health/', health_check, name='health-check'),
+
     # Records — order matters: summary and datasources before <record_id>
     path('records/summary',      RecordSummaryView.as_view(),     name='records-summary'),
     path('records/datasources',  RecordDataSourcesView.as_view(), name='records-datasources'),

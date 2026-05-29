@@ -1,23 +1,26 @@
 services:
   - type: web
     name: breathe-esg-api
-    env: dotnet
-    buildCommand: cd BreatheESG.API && dotnet publish -c Release -o ./publish
-    startCommand: cd BreatheESG.API/publish && dotnet BreatheESG.API.dll
-    envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
-      - key: ConnectionStrings__Default
-        fromDatabase:
-          name: breathe-esg-db
-          property: connectionString
-      - key: FRONTEND_URL
-        sync: false  # Set manually in Render dashboard
+    env: python
+    rootDir: breathe_esg_django
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput
+    startCommand: gunicorn breathe_esg.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --log-level info
+    healthCheckPath: /api/health/
     autoDeploy: true
-    healthCheckPath: /health
-
-databases:
-  - name: breathe-esg-db
-    plan: free
-    databaseName: breathe_esg
-    user: breathe_esg_user
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: breathe_esg.settings.production
+      - key: SECRET_KEY
+        generateValue: true          # Render auto-generates a secure value
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        sync: false                  # Set to your Render service URL after first deploy
+      - key: DATABASE_URL
+        sync: false                  # Paste your Neon postgres:// URL here
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false                  # Set to your Vercel frontend URL after first deploy
+      - key: UPLOADS_DIR
+        value: uploads
+      - key: WEB_CONCURRENCY
+        value: "2"
