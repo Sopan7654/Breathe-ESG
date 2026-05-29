@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: breathe-esg-api
+    env: dotnet
+    buildCommand: cd BreatheESG.API && dotnet publish -c Release -o ./publish
+    startCommand: cd BreatheESG.API/publish && dotnet BreatheESG.API.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Default
+        fromDatabase:
+          name: breathe-esg-db
+          property: connectionString
+      - key: FRONTEND_URL
+        sync: false  # Set manually in Render dashboard
+    autoDeploy: true
+    healthCheckPath: /health
+
+databases:
+  - name: breathe-esg-db
+    plan: free
+    databaseName: breathe_esg
+    user: breathe_esg_user

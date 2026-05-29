@@ -1,0 +1,72 @@
+# ============================================================
+# Breathe ESG — Root .gitignore
+# ============================================================
+
+# ── SECURITY: Never commit real credentials ───────────────────
+.env
+.env.*
+!.env.example
+!.env.production.example
+appsettings.Local.json
+appsettings.local.json
+appsettings.Development.json
+**/secrets.json
+
+# ── Directories excluded from the repo entirely ───────────────
+docs/
+sample_data/
+
+# ── Python / Django ───────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+*.egg
+.eggs/
+venv/
+.venv/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+htmlcov/
+.pytest_cache/
+staticfiles/
+uploads/
+
+# ── Node / Frontend ───────────────────────────────────────────
+node_modules/
+dist/
+dist-ssr/
+.cache/
+*.local
+
+# ── OS files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE / editor ──────────────────────────────────────────────
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# ── Logs ──────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── .NET (kept for reference if needed) ───────────────────────
+**/obj/
+**/bin/
+*.user
+*.suo
+.vs/
+**/publish/
