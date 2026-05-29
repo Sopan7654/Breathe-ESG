@@ -16,11 +16,17 @@ export default defineConfig({
     chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {
-        // Split vendor code into a separate chunk so it can be cached independently
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'query-vendor': ['@tanstack/react-query'],
-          'axios-vendor': ['axios'],
+        // Use function form — object literal causes TS2769 with this Rollup type version
+        manualChunks(id) {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            return 'react-vendor';
+          }
+          if (id.includes('@tanstack')) {
+            return 'query-vendor';
+          }
+          if (id.includes('axios')) {
+            return 'axios-vendor';
+          }
         },
       },
     },
