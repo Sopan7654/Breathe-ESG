@@ -7,31 +7,15 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // __dirname is not available in ESM; use import.meta.url instead
+      // Use import.meta.url — __dirname is not available in ESM
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   build: {
-    // Warn if any chunk exceeds 500 kB; helps catch accidental large imports
+    // Warn if any chunk exceeds 500 kB
     chunkSizeWarningLimit: 500,
-    rollupOptions: {
-      output: {
-        // Use function form — object literal causes TS2769 with this Rollup type version
-        manualChunks(id) {
-          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-            return 'react-vendor';
-          }
-          if (id.includes('@tanstack')) {
-            return 'query-vendor';
-          }
-          if (id.includes('axios')) {
-            return 'axios-vendor';
-          }
-        },
-      },
-    },
-    sourcemap: false,   // no source maps in prod (keeps bundle smaller)
-    minify: 'esbuild',  // fast & small
+    sourcemap: false,
+    minify: 'esbuild',
   },
   server: {
     port: 5173,
