@@ -77,10 +77,11 @@ WSGI_APPLICATION = 'breathe_esg.wsgi.application'
 
 # ---------------------------------------------------------------------------
 # Database — PostgreSQL via DATABASE_URL
-# CONN_MAX_AGE: keep connections alive 60s instead of reconnecting every request.
-# This is the single biggest performance win for serverless DBs like Neon.
+# Using psycopg3 (psycopg[binary]) — works on Python 3.12+ including 3.14.
+# CONN_MAX_AGE: keep connections alive 60s — biggest perf win for Neon.
 # ---------------------------------------------------------------------------
 _db_config = env.db('DATABASE_URL')
+_db_config['ENGINE'] = 'django.db.backends.postgresql'  # psycopg3 when psycopg[binary] installed
 _db_config['CONN_MAX_AGE'] = 60          # seconds — keeps TCP connection warm
 _db_config['CONN_HEALTH_CHECKS'] = True  # validate before reusing stale connections
 DATABASES = {'default': _db_config}

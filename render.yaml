@@ -2,6 +2,7 @@ services:
   - type: web
     name: breathe-esg-api
     env: python
+    pythonVersion: "3.12.3"          # Explicitly pin Python version
     rootDir: breathe_esg_django
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput
     startCommand: gunicorn breathe_esg.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --log-level info
@@ -11,7 +12,7 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: breathe_esg.settings.production
       - key: SECRET_KEY
-        generateValue: true          # Render auto-generates a secure value
+        generateValue: true
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
@@ -24,3 +25,5 @@ services:
         value: uploads
       - key: WEB_CONCURRENCY
         value: "2"
+      - key: PYTHON_VERSION
+        value: "3.12.3"              # Belt-and-suspenders: also set via env var
